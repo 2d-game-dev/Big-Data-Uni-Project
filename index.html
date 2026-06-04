@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Typing Master | Speed Test</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="background-gradient"></div>
+    
+    <div class="container">
+        <div class="header">
+            <div class="logo">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M4 17L8 13L11 16L20 7" stroke="url(#grad)" stroke-width="2" stroke-linecap="round"/>
+                    <defs>
+                        <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="0%">
+                            <stop offset="0%" style="stop-color:#667eea"/>
+                            <stop offset="100%" style="stop-color:#764ba2"/>
+                        </linearGradient>
+                    </defs>
+                </svg>
+                <span>TypingMaster</span>
+            </div>
+            <div id="userBadge" class="badge" style="cursor: pointer;" onclick="showAuthModal()">👤 Sign In</div>
+        </div>
+
+        <div class="stats-panel">
+            <div class="stat-card">
+                <div class="stat-icon">⏱️</div>
+                <div class="stat-content">
+                    <div class="stat-label">Time Remaining</div>
+                    <div class="stat-value"><span id="time">60</span><span class="stat-unit">s</span></div>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">⚡</div>
+                <div class="stat-content">
+                    <div class="stat-label">Typing Speed</div>
+                    <div class="stat-value"><span id="wpm">0</span><span class="stat-unit">WPM</span></div>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">🎯</div>
+                <div class="stat-content">
+                    <div class="stat-label">Accuracy</div>
+                    <div class="stat-value"><span id="accuracy">100</span><span class="stat-unit">%</span></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="quote-container">
+            <div class="quote-header">
+                <span>📝 Current Passage</span>
+                <span class="quote-length"></span>
+            </div>
+            <div class="quote-text" id="quote"></div>
+        </div>
+
+        <div class="input-container">
+            <textarea 
+                id="input"
+                placeholder="Please sign in to start typing..."
+                spellcheck="false"
+                disabled
+            ></textarea>
+            <div class="input-focus-effect"></div>
+        </div>
+
+        <div class="action-buttons">
+            <button id="restartBtn" class="btn-primary" disabled>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M1 12C1 18.0751 5.92487 23 12 23C18.0751 23 23 18.0751 23 12C23 5.92487 18.0751 1 12 1" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    <path d="M12 5L9 8L12 11" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M9 8H15C17.2091 8 19 9.79086 19 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+                New Challenge
+            </button>
+            <button id="simulateKafkaBtn" class="btn-secondary" disabled>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/>
+                    <path d="M19.4 15C18.7 16.5 17.4 17.7 15.8 18.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    <path d="M4.6 9C5.3 7.5 6.6 6.3 8.2 5.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    <path d="M3 12H5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    <path d="M19 12H21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    <path d="M12 3V5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    <path d="M12 19V21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+                Kafka Stream
+            </button>
+        </div>
+
+        <div class="status-bar">
+            <div class="status-dot" id="kafkaStatus"></div>
+            <span id="statusText">Ready</span>
+        </div>
+    </div>
+
+    <!-- Auth Modal -->
+    <div id="authModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalTitle">Sign In</h2>
+                <span class="close" onclick="closeAuthModal()">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="auth-tabs">
+                    <button class="tab-btn active" onclick="switchTab('login')">Sign In</button>
+                    <button class="tab-btn" onclick="switchTab('register')">Sign Up</button>
+                </div>
+                
+                <!-- Login Form -->
+                <div id="loginForm" class="auth-form active">
+                    <input type="text" id="loginUsername" placeholder="Username" class="auth-input">
+                    <input type="password" id="loginPassword" placeholder="Password" class="auth-input">
+                    <button onclick="login()" class="auth-submit">Sign In</button>
+                </div>
+                
+                <!-- Register Form -->
+                <div id="registerForm" class="auth-form">
+                    <input type="text" id="regUsername" placeholder="Username" class="auth-input">
+                    <input type="email" id="regEmail" placeholder="Email" class="auth-input">
+                    <input type="password" id="regPassword" placeholder="Password" class="auth-input">
+                    <input type="password" id="regConfirmPassword" placeholder="Confirm Password" class="auth-input">
+                    <button onclick="register()" class="auth-submit">Create Account</button>
+                </div>
+            </div>
+        </div>
+    </div>
+     
+    <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+    <script src="function.js"></script>
+    
+</body>
+</html>
